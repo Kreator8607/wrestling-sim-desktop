@@ -1,0 +1,93 @@
+{
+  "name": "pro-wrestling-sim-desktop",
+  "version": "2.0.0",
+  "description": "Pro Wrestling Simulator - Desktop Application for Windows",
+  "main": "electron/main-cjs.js",
+  "homepage": "./",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run react-dev\" \"wait-on http://localhost:5173 && ELECTRON_DEV=true electron electron/main-cjs.js\"",
+    "react-dev": "vite",
+    "react-build": "vite build",
+    "build": "npm run react-build && electron-builder",
+    "build:win": "npm run react-build && electron-builder --win",
+    "build:win-portable": "npm run react-build && electron-builder --win --portable",
+    "start": "electron .",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.408.0",
+    "sonner": "^1.3.1",
+    "wouter": "^3.2.1",
+    "tailwindcss": "^4.0.0",
+    "better-sqlite3": "^9.2.2",
+    "drizzle-orm": "^0.30.10",
+    "drizzle-kit": "^0.20.14",
+    "zod": "^3.22.4",
+    "superjson": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.0.1",
+    "vitest": "^1.0.4",
+    "@testing-library/react": "^14.1.2",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  },
+  "build": {
+    "appId": "com.proWrestlingSim.desktop",
+    "productName": "Pro Wrestling Sim",
+    "extraMetadata": {
+      "author": "Pro Wrestling Sim Team"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "certificateFile": null,
+      "certificatePassword": null,
+      "signingHashAlgorithms": [
+        "sha256"
+      ],
+      "sign": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Pro Wrestling Sim",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico"
+    }
+  }
+}

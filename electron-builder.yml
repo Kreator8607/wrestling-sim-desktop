@@ -1,0 +1,39 @@
+appId: com.prowrestlingsim.desktop
+productName: Pro Wrestling Sim
+directories:
+  buildResources: assets
+  output: dist
+
+files:
+  - from: .
+    to: .
+    filter:
+      - '!node_modules'
+      - '!.git'
+      - '!dist'
+      - '!.env'
+      - '!.env.local'
+      - '!src'
+      - '!*.md'
+
+win:
+  target:
+    - portable
+  certificateFile: null
+  certificatePassword: null
+  sign: null
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Pro Wrestling Sim
+  installerIcon: assets/icon.ico
+  uninstallerIcon: assets/icon.ico
+  installerHeaderIcon: assets/icon.ico
+
+portable:
+  artifactName: ${productName}-${version}-portable.exe
+
+publish: null
