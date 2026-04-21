@@ -1,0 +1,31 @@
+{
+  "name": "wrestling-sim-desktop",
+  "version": "3.0.0",
+  "description": "Pro Wrestling Simulator - Desktop Application",
+  "main": "dist/main.js",
+  "homepage": "./",
+  "author": "Kreator8607",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently \"npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "test": "vitest",
+    "build:win": "npm run react-build && electron-builder --win --publish never",
+    "build": "npm run build:win"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^6.20.0",
+    "lucide-react": "^0.294.0"
+  },
+  "devDependencies": {
+    "react-scripts": "5.0.1",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.0.1",
+    "vitest": "^1.0.0"
+  }
+}

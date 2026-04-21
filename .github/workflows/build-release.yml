@@ -1,0 +1,79 @@
+name: Build and Release v3.0.0
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      
+      - name: Build React app
+        run: npm run react-build
+      
+      - name: Build Electron app
+        run: npm run build:win
+      
+      - name: Generate checksums
+        run: |
+          $files = Get-ChildItem -Path "dist" -Filter "*.exe"
+          foreach ($file in $files) {
+            $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash
+            "$hash  $($file.Name)" | Out-File -FilePath "dist/checksums.txt" -Append
+          }
+      
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Pro Wrestling Sim ${{ github.ref }}
+          body_path: CHANGELOG_v3.0.0.md
+          draft: false
+          prerelease: false
+      
+      - name: Upload NSIS Installer
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/Pro Wrestling Sim v3.0.0.exe
+          asset_name: Pro Wrestling Sim v3.0.0.exe
+          asset_content_type: application/octet-stream
+      
+      - name: Upload Portable Executable
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/Pro Wrestling Sim v3.0.0 Portable.exe
+          asset_name: Pro Wrestling Sim v3.0.0 Portable.exe
+          asset_content_type: application/octet-stream
+      
+      - name: Upload Checksums
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/checksums.txt
+          asset_name: checksums.txt
+          asset_content_type: text/plain
