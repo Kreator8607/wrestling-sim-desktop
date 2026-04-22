@@ -14,9 +14,11 @@ import AdvancedStats from './pages/AdvancedStats';
 import Settings from './pages/Settings';
 import BackupRecovery from './pages/BackupRecovery';
 import ContentManagement from './pages/ContentManagement';
-import DashboardLayout from './components/DashboardLayout';
+import DashboardLayout from './components/DashboardLayout.Final';
 import { ThemeProvider } from './components/ThemeProvider';
 import { InteractiveTutorial } from './components/InteractiveTutorial';
+import './styles/pro-wrestling-theme.css';
+import './styles/animations.css';
 
 export default function App() {
   const [appVersion, setAppVersion] = useState('3.0.0');
