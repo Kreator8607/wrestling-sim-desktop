@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
     steps:
       - name: Checkout code
@@ -16,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
       
       - name: Install dependencies
@@ -37,43 +39,17 @@ jobs:
           }
       
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Pro Wrestling Sim ${{ github.ref }}
+          name: Pro Wrestling Sim ${{ github.ref }}
           body_path: CHANGELOG_v3.0.0.md
           draft: false
           prerelease: false
-      
-      - name: Upload NSIS Installer
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/Pro Wrestling Sim v3.0.0.exe
-          asset_name: Pro Wrestling Sim v3.0.0.exe
-          asset_content_type: application/octet-stream
-      
-      - name: Upload Portable Executable
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/Pro Wrestling Sim v3.0.0 Portable.exe
-          asset_name: Pro Wrestling Sim v3.0.0 Portable.exe
-          asset_content_type: application/octet-stream
-      
-      - name: Upload Checksums
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/checksums.txt
-          asset_name: checksums.txt
-          asset_content_type: text/plain
+          files: |
+            ./dist/Pro Wrestling Sim v3.0.0.exe
+            ./dist/Pro Wrestling Sim v3.0.0 Portable.exe
+            ./dist/checksums.txt
