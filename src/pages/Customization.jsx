@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Edit2, Trash2, Save, X, Users, Zap, Heart, Muscle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, Users, Zap, Heart, Power } from 'lucide-react';
 
 export default function Customization() {
   const [customWrestlers, setCustomWrestlers] = useState([
@@ -156,7 +156,7 @@ export default function Customization() {
 
       <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
         <div className="flex items-center gap-2">
-          <Muscle className="w-3 h-3 text-blue-500" />
+          <Power className="w-3 h-3 text-blue-500" />
           <span>Wrestling: {wrestler.attributes.wrestlingSkill}</span>
         </div>
         <div className="flex items-center gap-2">
