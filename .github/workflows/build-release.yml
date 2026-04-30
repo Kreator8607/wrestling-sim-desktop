@@ -27,8 +27,11 @@ jobs:
       - name: Build React app
         run: npm run react-build
       
+      - name: Copy Electron entry point
+        run: npm run copy-electron
+      
       - name: Build Electron app
-        run: npm run build:win
+        run: npx electron-builder --win --publish never
       
       - name: Generate checksums
         run: |
@@ -50,6 +53,5 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ./dist/Pro Wrestling Sim v3.0.0.exe
-            ./dist/Pro Wrestling Sim v3.0.0 Portable.exe
+            ./dist/Pro-Wrestling-Sim-3.0.0.exe
             ./dist/checksums.txt

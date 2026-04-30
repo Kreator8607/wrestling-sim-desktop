@@ -1,0 +1,256 @@
+/* Dynamic Theme System - Promotion-Based Colors */
+
+:root {
+  /* Default Theme (Red/Black/Gold) */
+  --primary-color: #cc0000;
+  --primary-dark: #990000;
+  --secondary-color: #000000;
+  --accent-color: #ffd700;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --border-color: #cc0000;
+  --shadow-color: rgba(204, 0, 0, 0.3);
+}
+
+/* WWE Theme - Blue/White/Gold */
+[data-theme='wwe'] {
+  --primary-color: #0066cc;
+  --primary-dark: #004499;
+  --secondary-color: #ffffff;
+  --accent-color: #ffd700;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --bg-primary: #001a4d;
+  --bg-secondary: #003366;
+  --border-color: #0066cc;
+  --shadow-color: rgba(0, 102, 204, 0.3);
+}
+
+/* AEW Theme - Yellow/Black */
+[data-theme='aew'] {
+  --primary-color: #ffcc00;
+  --primary-dark: #cc9900;
+  --secondary-color: #000000;
+  --accent-color: #ff6600;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --bg-primary: #1a1a00;
+  --bg-secondary: #333300;
+  --border-color: #ffcc00;
+  --shadow-color: rgba(255, 204, 0, 0.3);
+}
+
+/* NJPW Theme - Red/White */
+[data-theme='njpw'] {
+  --primary-color: #cc0000;
+  --primary-dark: #990000;
+  --secondary-color: #ffffff;
+  --accent-color: #ffff00;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --bg-primary: #1a0000;
+  --bg-secondary: #330000;
+  --border-color: #cc0000;
+  --shadow-color: rgba(204, 0, 0, 0.3);
+}
+
+/* TNA Theme - Purple/Gold */
+[data-theme='tna'] {
+  --primary-color: #9933ff;
+  --primary-dark: #6600cc;
+  --secondary-color: #000000;
+  --accent-color: #ffd700;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --bg-primary: #1a0033;
+  --bg-secondary: #330066;
+  --border-color: #9933ff;
+  --shadow-color: rgba(153, 51, 255, 0.3);
+}
+
+/* ROH Theme - Gray/Black */
+[data-theme='roh'] {
+  --primary-color: #666666;
+  --primary-dark: #333333;
+  --secondary-color: #000000;
+  --accent-color: #cccccc;
+  --text-primary: #ffffff;
+  --text-secondary: #999999;
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --border-color: #666666;
+  --shadow-color: rgba(102, 102, 102, 0.3);
+}
+
+/* CMLL Theme - Green/Gold */
+[data-theme='cmll'] {
+  --primary-color: #00cc00;
+  --primary-dark: #009900;
+  --secondary-color: #000000;
+  --accent-color: #ffd700;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --bg-primary: #001a00;
+  --bg-secondary: #003300;
+  --border-color: #00cc00;
+  --shadow-color: rgba(0, 204, 0, 0.3);
+}
+
+/* Theme Transitions */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Apply theme to components */
+.theme-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.theme-primary-bg {
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+}
+
+.theme-secondary-bg {
+  background-color: var(--secondary-color);
+  color: var(--text-primary);
+}
+
+.theme-accent {
+  color: var(--accent-color);
+}
+
+.theme-accent-bg {
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+}
+
+.theme-border {
+  border-color: var(--primary-color);
+}
+
+.theme-shadow {
+  box-shadow: 0 0 20px var(--shadow-color);
+}
+
+.theme-gradient {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+}
+
+/* Themed Button */
+.btn-theme {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: var(--text-primary);
+  border: 2px solid var(--primary-color);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-theme:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.btn-theme:active {
+  transform: translateY(0);
+}
+
+/* Themed Card */
+.card-theme {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+/* Themed Input */
+.input-theme {
+  background-color: var(--bg-primary);
+  border: 2px solid var(--primary-color);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.input-theme:focus {
+  outline: none;
+  box-shadow: 0 0 12px var(--shadow-color);
+}
+
+/* Themed Progress Bar */
+.progress-theme {
+  background-color: var(--bg-secondary);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 8px;
+}
+
+.progress-theme-fill {
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Themed Badge */
+.badge-theme {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: var(--text-primary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* Themed Divider */
+.divider-theme {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  margin: 16px 0;
+}
+
+/* Themed Text Highlight */
+.highlight-theme {
+  background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+}
+
+/* Responsive Theme Adjustments */
+@media (max-width: 768px) {
+  .card-theme {
+    padding: 12px;
+    border-width: 1px;
+  }
+
+  .btn-theme {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Animation for theme transitions */
+@keyframes theme-fade {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+[data-theme] {
+  animation: theme-fade 0.3s ease-in-out;
+}

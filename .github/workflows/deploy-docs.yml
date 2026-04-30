@@ -1,0 +1,126 @@
+name: Deploy Documentation v3.0.0
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '*.md'
+      - 'docs/**'
+      - 'RELEASE_NOTES*'
+      - 'CHANGELOG*'
+      - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: List documentation files
+        run: |
+          echo "Documentation files to deploy:"
+          find . -maxdepth 1 -name "*.md" -type f | head -20
+          echo ""
+          echo "Total markdown files:"
+          find . -maxdepth 1 -name "*.md" -type f | wc -l
+
+      - name: Create docs directory
+        run: |
+          mkdir -p docs/v3.0.0
+          mkdir -p docs/guides
+          mkdir -p docs/api
+
+      - name: Copy documentation files
+        run: |
+          # Copy main documentation
+          cp -v ADVANCED_UI_FEATURES.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v BUILD_FIX_DOCUMENTATION.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v BUILD_FIX_QUICK_REFERENCE.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v BUILD_FIX_SUMMARY.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v BUILD_SUMMARY.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v DELIVERABLES.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v FILES_CREATED.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v IMPLEMENTATION_GUIDE.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v IMPROVEMENTS_SUMMARY.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v RELEASE_NOTES_v3.0.0.md docs/v3.0.0/ 2>/dev/null || true
+          
+          # Copy guides
+          cp -v GIT_RELEASE_GUIDE.md docs/guides/ 2>/dev/null || true
+          cp -v GIT_RELEASE_QUICK_REFERENCE.md docs/guides/ 2>/dev/null || true
+          
+          # Copy API documentation
+          cp -v GITHUB_API_GUIDE.md docs/api/ 2>/dev/null || true
+
+      - name: Create documentation index
+        run: |
+          cat > docs/INDEX.md << 'EOF'
+          # Pro Wrestling Sim v3.0.0 - Documentation Index
+          
+          ## Release Documentation
+          
+          ### v3.0.0 Release
+          - [Advanced UI Features](v3.0.0/ADVANCED_UI_FEATURES.md)
+          - [Build Fix Documentation](v3.0.0/BUILD_FIX_DOCUMENTATION.md)
+          - [Build Fix Quick Reference](v3.0.0/BUILD_FIX_QUICK_REFERENCE.md)
+          - [Build Summary](v3.0.0/BUILD_SUMMARY.md)
+          - [Deliverables](v3.0.0/DELIVERABLES.md)
+          - [Files Created](v3.0.0/FILES_CREATED.md)
+          - [Implementation Guide](v3.0.0/IMPLEMENTATION_GUIDE.md)
+          - [Improvements Summary](v3.0.0/IMPROVEMENTS_SUMMARY.md)
+          - [Release Notes](v3.0.0/RELEASE_NOTES_v3.0.0.md)
+          
+          ## Guides
+          
+          - [Git Release Guide](guides/GIT_RELEASE_GUIDE.md)
+          - [Git Release Quick Reference](guides/GIT_RELEASE_QUICK_REFERENCE.md)
+          
+          ## API Documentation
+          
+          - [GitHub API Guide](api/GITHUB_API_GUIDE.md)
+          
+          ---
+          
+          **Version**: 3.0.0  
+          **Last Updated**: $(date)  
+          **Status**: Production Ready
+          EOF
+
+      - name: Verify documentation files
+        run: |
+          echo "Documentation structure:"
+          find docs -type f -name "*.md" | sort
+
+      - name: Commit documentation
+        run: |
+          git add docs/
+          git commit -m "docs: Deploy v3.0.0 documentation" || echo "No changes to commit"
+
+      - name: Push documentation
+        run: |
+          git push origin master || echo "Nothing to push"
+
+      - name: Create summary
+        run: |
+          echo "## Documentation Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: ✅ Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Files Deployed**:" >> $GITHUB_STEP_SUMMARY
+          find docs -type f -name "*.md" | wc -l | xargs echo "- Total markdown files:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Location**: https://github.com/Kreator8607/wrestling-sim-desktop/tree/master/docs" >> $GITHUB_STEP_SUMMARY
