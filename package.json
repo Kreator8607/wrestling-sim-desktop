@@ -1,7 +1,7 @@
 {
   "name": "wrestling-sim-desktop",
-  "version": "3.0.0",
-  "description": "Pro Wrestling Simulator - Desktop Application",
+  "version": "4.0.0",
+  "description": "Pro Wrestling Sim v4.0.0 - Desktop Application with Database Optimization",
     "main": "public/electron.js",
   "homepage": "./",
   "author": "Kreator8607",
@@ -17,11 +17,13 @@
   },
   "dependencies": {
     "chart.js": "^4.5.1",
+    "framer-motion": "^10.16.16",
     "lucide-react": "^0.294.0",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.20.0",
+    "sql.js": "^1.8.0",
     "wouter": "^3.0.0"
   },
   "devDependencies": {

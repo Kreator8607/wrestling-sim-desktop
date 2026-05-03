@@ -3,11 +3,11 @@ import { CacheManager, memoize, debounce, throttle } from '../utils/cache';
 import { BackupManager, ErrorRecovery } from '../utils/backup';
 
 /**
- * Comprehensive Test Suite for Pro Wrestling Sim v3.0.0
+ * Comprehensive Test Suite for Pro Wrestling Sim v4.0.0
  * Tests all 20+ features with performance and stability tests
  */
 
-describe('Pro Wrestling Sim v3.0.0 - Feature Tests', () => {
+describe('Pro Wrestling Sim v4.0.0 - Feature Tests', () => {
   beforeEach(() => {
     // Clear all caches and backups before each test
     CacheManager.clear();

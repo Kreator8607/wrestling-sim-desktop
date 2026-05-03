@@ -1,4 +1,4 @@
-name: Build and Release v3.0.0
+name: Build and Release v4.0.0
 
 on:
   push:
@@ -49,9 +49,9 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           name: Pro Wrestling Sim ${{ github.ref }}
-          body_path: CHANGELOG_v3.0.0.md
+          body_path: CHANGELOG_v4.0.0.md
           draft: false
           prerelease: false
           files: |
-            ./dist/Pro-Wrestling-Sim-3.0.0.exe
+            ./dist/Pro-Wrestling-Sim-4.0.0.exe
             ./dist/checksums.txt

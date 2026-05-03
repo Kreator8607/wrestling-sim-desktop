@@ -1,4 +1,4 @@
-name: Deploy Documentation v3.0.0
+name: Deploy Documentation v4.0.0
 
 on:
   push:
@@ -41,23 +41,23 @@ jobs:
 
       - name: Create docs directory
         run: |
-          mkdir -p docs/v3.0.0
+          mkdir -p docs/v4.0.0
           mkdir -p docs/guides
           mkdir -p docs/api
 
       - name: Copy documentation files
         run: |
           # Copy main documentation
-          cp -v ADVANCED_UI_FEATURES.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v BUILD_FIX_DOCUMENTATION.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v BUILD_FIX_QUICK_REFERENCE.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v BUILD_FIX_SUMMARY.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v BUILD_SUMMARY.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v DELIVERABLES.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v FILES_CREATED.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v IMPLEMENTATION_GUIDE.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v IMPROVEMENTS_SUMMARY.md docs/v3.0.0/ 2>/dev/null || true
-          cp -v RELEASE_NOTES_v3.0.0.md docs/v3.0.0/ 2>/dev/null || true
+          cp -v ADVANCED_UI_FEATURES.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v BUILD_FIX_DOCUMENTATION.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v BUILD_FIX_QUICK_REFERENCE.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v BUILD_FIX_SUMMARY.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v BUILD_SUMMARY.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v DELIVERABLES.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v FILES_CREATED.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v IMPLEMENTATION_GUIDE.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v IMPROVEMENTS_SUMMARY.md docs/v4.0.0/ 2>/dev/null || true
+          cp -v RELEASE_NOTES_v4.0.0.md docs/v4.0.0/ 2>/dev/null || true
           
           # Copy guides
           cp -v GIT_RELEASE_GUIDE.md docs/guides/ 2>/dev/null || true
@@ -69,20 +69,20 @@ jobs:
       - name: Create documentation index
         run: |
           cat > docs/INDEX.md << 'EOF'
-          # Pro Wrestling Sim v3.0.0 - Documentation Index
+          # Pro Wrestling Sim v4.0.0 - Documentation Index
           
           ## Release Documentation
           
-          ### v3.0.0 Release
-          - [Advanced UI Features](v3.0.0/ADVANCED_UI_FEATURES.md)
-          - [Build Fix Documentation](v3.0.0/BUILD_FIX_DOCUMENTATION.md)
-          - [Build Fix Quick Reference](v3.0.0/BUILD_FIX_QUICK_REFERENCE.md)
-          - [Build Summary](v3.0.0/BUILD_SUMMARY.md)
-          - [Deliverables](v3.0.0/DELIVERABLES.md)
-          - [Files Created](v3.0.0/FILES_CREATED.md)
-          - [Implementation Guide](v3.0.0/IMPLEMENTATION_GUIDE.md)
-          - [Improvements Summary](v3.0.0/IMPROVEMENTS_SUMMARY.md)
-          - [Release Notes](v3.0.0/RELEASE_NOTES_v3.0.0.md)
+          ### v4.0.0 Release
+          - [Advanced UI Features](v4.0.0/ADVANCED_UI_FEATURES.md)
+          - [Build Fix Documentation](v4.0.0/BUILD_FIX_DOCUMENTATION.md)
+          - [Build Fix Quick Reference](v4.0.0/BUILD_FIX_QUICK_REFERENCE.md)
+          - [Build Summary](v4.0.0/BUILD_SUMMARY.md)
+          - [Deliverables](v4.0.0/DELIVERABLES.md)
+          - [Files Created](v4.0.0/FILES_CREATED.md)
+          - [Implementation Guide](v4.0.0/IMPLEMENTATION_GUIDE.md)
+          - [Improvements Summary](v4.0.0/IMPROVEMENTS_SUMMARY.md)
+          - [Release Notes](v4.0.0/RELEASE_NOTES_v4.0.0.md)
           
           ## Guides
           
@@ -95,7 +95,7 @@ jobs:
           
           ---
           
-          **Version**: 3.0.0  
+          **Version**: 4.0.0  
           **Last Updated**: $(date)  
           **Status**: Production Ready
           EOF
@@ -108,7 +108,7 @@ jobs:
       - name: Commit documentation
         run: |
           git add docs/
-          git commit -m "docs: Deploy v3.0.0 documentation" || echo "No changes to commit"
+          git commit -m "docs: Deploy v4.0.0 documentation" || echo "No changes to commit"
 
       - name: Push documentation
         run: |

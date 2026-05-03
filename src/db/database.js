@@ -1,15 +1,15 @@
 /**
- * Pro Wrestling Sim - SQLite Database Implementation
+ * Pro Wrestling Sim - SQLite Database Implementation (sql.js)
  * 
  * Provides optimized database operations with:
- * - Connection pooling
+ * - In-memory SQLite via sql.js (cross-platform compatible)
  * - Query caching
  * - Transaction support
  * - Automatic backups
  * - Performance monitoring
  */
 
-const Database = require('better-sqlite3');
+const initSqlJs = require('sql.js');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -18,6 +18,7 @@ class WrestlingSimDatabase {
   constructor(dbPath = null) {
     this.dbPath = dbPath || path.join(process.env.APPDATA || process.env.HOME, 'WrestlingSim', 'data.db');
     this.db = null;
+    this.SQL = null;
     this.cache = new Map();
     this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
     this.queryStats = {
@@ -25,6 +26,7 @@ class WrestlingSimDatabase {
       cached: 0,
       time: 0
     };
+    this.initialized = false;
   }
 
   /**
@@ -32,30 +34,51 @@ class WrestlingSimDatabase {
    */
   async initialize() {
     try {
+      // Initialize sql.js
+      this.SQL = await initSqlJs();
+      
       // Ensure directory exists
       const dir = path.dirname(this.dbPath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
 
-      // Create database connection
-      this.db = new Database(this.dbPath);
-      
-      // Enable optimizations
-      this.db.pragma('journal_mode = WAL');
-      this.db.pragma('synchronous = NORMAL');
-      this.db.pragma('cache_size = 10000');
-      this.db.pragma('temp_store = MEMORY');
-      this.db.pragma('foreign_keys = ON');
+      // Load existing database or create new one
+      let filebuffer = null;
+      if (fs.existsSync(this.dbPath)) {
+        filebuffer = fs.readFileSync(this.dbPath);
+      }
 
+      // Create database instance
+      this.db = new this.SQL.Database(filebuffer);
+      
       // Create schema
       await this.createSchema();
       
+      // Save to disk
+      this.saveDatabase();
+      
+      this.initialized = true;
       console.log('✓ Database initialized:', this.dbPath);
       return true;
     } catch (error) {
       console.error('✗ Database initialization failed:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Save database to disk
+   */
+  saveDatabase() {
+    try {
+      if (this.db) {
+        const data = this.db.export();
+        const buffer = Buffer.from(data);
+        fs.writeFileSync(this.dbPath, buffer);
+      }
+    } catch (error) {
+      console.error('✗ Failed to save database:', error);
     }
   }
 
@@ -244,7 +267,7 @@ class WrestlingSimDatabase {
 
     for (const statement of statements) {
       try {
-        this.db.exec(statement);
+        this.db.run(statement);
       } catch (error) {
         console.error('Error executing statement:', statement, error);
       }
@@ -280,7 +303,13 @@ class WrestlingSimDatabase {
     // Execute query
     try {
       const stmt = this.db.prepare(sql);
-      const result = stmt.all(...(params || []));
+      stmt.bind(params || []);
+      
+      const result = [];
+      while (stmt.step()) {
+        result.push(stmt.getAsObject());
+      }
+      stmt.free();
       
       // Cache result
       if (useCache) {
@@ -315,7 +344,14 @@ class WrestlingSimDatabase {
     this.invalidateCache();
     try {
       const stmt = this.db.prepare(sql);
-      return stmt.run(...(params || []));
+      stmt.bind(params || []);
+      stmt.step();
+      stmt.free();
+      
+      // Save changes to disk
+      this.saveDatabase();
+      
+      return { changes: this.db.getRowsModified() };
     } catch (error) {
       console.error('Execute error:', sql, params, error);
       throw error;
@@ -327,8 +363,16 @@ class WrestlingSimDatabase {
    */
   transaction(callback) {
     this.invalidateCache();
-    const transaction = this.db.transaction(callback);
-    return transaction();
+    try {
+      this.db.run('BEGIN TRANSACTION');
+      const result = callback();
+      this.db.run('COMMIT');
+      this.saveDatabase();
+      return result;
+    } catch (error) {
+      this.db.run('ROLLBACK');
+      throw error;
+    }
   }
 
   /**
@@ -384,6 +428,7 @@ class WrestlingSimDatabase {
    */
   close() {
     if (this.db) {
+      this.saveDatabase();
       this.db.close();
       console.log('✓ Database connection closed');
     }
