@@ -1,6 +1,6 @@
 {
   "name": "wrestling-sim-desktop",
-  "version": "4.0.0",
+  "version": "5.0.0-roadmap",
   "description": "Pro Wrestling Sim v4.0.0 - Desktop Application with Database Optimization",
     "main": "public/electron.js",
   "homepage": "./",
