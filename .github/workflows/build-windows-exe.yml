@@ -1,0 +1,121 @@
+name: Build Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build React application
+        run: npm run react-build
+      
+      - name: Copy Electron main process
+        run: node -e "const fs = require('fs'); fs.copyFileSync('src/main.js', 'build/electron.js');"
+      
+      - name: Build Windows executable
+        run: npx electron-builder --win --publish never
+        env:
+          CI: true
+      
+      - name: Get version from package.json
+        id: version
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      
+      - name: List build artifacts
+        run: |
+          Get-ChildItem -Path "dist" -Recurse | Format-Table FullName, Length
+      
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/*.exe
+            dist/*.exe.blockmap
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Release Notes
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          $releaseNotes = @"
+          # Pro Wrestling Sim v$version - Windows Release
+          
+          ## 🎉 Release Highlights
+          
+          ### ✅ What's New
+          - Comprehensive improvement roadmap for v5.0.0
+          - PostgreSQL migration strategy
+          - ELO rating system implementation
+          - Tournament management system
+          - Advanced analytics platform
+          - Microservices architecture
+          
+          ### 📊 Build Information
+          - **Version**: $version
+          - **Platform**: Windows (x64)
+          - **Build Date**: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+          - **Node.js**: ${{ matrix.node-version }}
+          
+          ### 📥 Installation
+          1. Download `Pro-Wrestling-Sim-$version.exe`
+          2. Run the installer
+          3. Follow the installation wizard
+          4. Launch the application
+          
+          ### 🔧 System Requirements
+          - Windows 7 SP1 or later
+          - 2GB RAM minimum
+          - 500MB disk space
+          - .NET Framework 4.5+
+          
+          ### 📚 Documentation
+          - See `RELEASE_NOTES_v5.0.0_ROADMAP.md` for roadmap
+          - See `QUICK_START_IMPROVEMENTS.md` for implementation guide
+          - See `IMPROVEMENT_ROADMAP_v5.0.0.md` for detailed strategies
+          
+          ### 🐛 Known Issues
+          - None reported
+          
+          ### 🙏 Support
+          For issues or questions, please open an issue on GitHub.
+          "@
+          
+          $releaseNotes | Out-File -FilePath "RELEASE_NOTES_GENERATED.md" -Encoding utf8
+      
+      - name: Upload Release Notes
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: RELEASE_NOTES_GENERATED.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
