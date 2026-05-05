@@ -1,0 +1,65 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "Kreator8607"
+    assignees:
+      - "Kreator8607"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps):"
+      prefix-minor: "chore(deps):"
+      prefix-patch: "chore(deps):"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "/"
+    rebase-strategy: "auto"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      # Add packages to ignore if needed
+      # - dependency-name: "package-name"
+    # Auto-merge minor and patch updates
+    auto-merge: true
+    # Auto-commit for patch updates
+    auto-commit: true
+    # Vulnerability alerts
+    vulnerability-alerts: true
+    # Security updates
+    security-updates: true
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "Kreator8607"
+    assignees:
+      - "Kreator8607"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci(deps):"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "/"
+    rebase-strategy: "auto"
+    # Auto-merge patch updates
+    auto-merge: true
+    # Auto-commit for updates
+    auto-commit: true
