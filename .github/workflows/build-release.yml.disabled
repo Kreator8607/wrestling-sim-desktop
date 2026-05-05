@@ -1,9 +1,25 @@
-name: Build and Release v4.0.0
+name: Build and Release v4.0.0 [DISABLED]
+
+# THIS WORKFLOW HAS BEEN DISABLED
+# Use .github/workflows/build-windows-exe.yml instead
+# 
+# Reason for disabling:
+# - References non-existent CHANGELOG_v4.0.0.md file
+# - References hardcoded Pro-Wrestling-Sim-4.0.0.exe file
+# - Uses deprecated softprops/action-gh-release@v1
+# - Conflicts with new build-windows-exe.yml workflow
+#
+# The new build-windows-exe.yml workflow:
+# - Generates release notes dynamically
+# - Handles missing files gracefully
+# - Uses softprops/action-gh-release@v2
+# - Is fully compatible with v5.0.0+
 
 on:
+  # DISABLED - This workflow will not run
   push:
     tags:
-      - 'v*'
+      - 'v*-DISABLED'
 
 jobs:
   build:
