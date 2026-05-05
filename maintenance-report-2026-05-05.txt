@@ -1,0 +1,235 @@
+[0;34m╔════════════════════════════════════════════════════════════╗[0m
+[0;34m║  GitHub Actions & Dependencies Maintenance Check          ║[0m
+[0;34m║  Pro Wrestling Sim v5.0.0                                 ║[0m
+[0;34m╚════════════════════════════════════════════════════════════╝[0m
+
+[0;34m[03:58:58][0m Starting maintenance check at 2026-05-05 03:58:58
+[0;34m[03:58:58][0m Checking Node.js version...
+[0;32m✅ Node.js: v22.13.0, npm: 10.9.2[0m
+[0;34m[03:58:58][0m Running npm audit...
+./scripts/maintenance-check.sh: line 130: [: : integer expression expected
+[1;33m⚠️  npm audit:  vulnerabilities found[0m
+[0;34m[03:59:01][0m Attempting to fix vulnerabilities...
+
+up to date, audited 1573 packages in 6s
+
+316 packages are looking for funding
+  run `npm fund` for details
+
+# npm audit report
+
+@tootallnate/once  <3.0.1
+@tootallnate/once vulnerable to Incorrect Control Flow Scoping - https://github.com/advisories/GHSA-vpq2-c234-7xj6
+fix available via `npm audit fix --force`
+Will install electron-builder@26.8.1, which is a breaking change
+node_modules/@tootallnate/once
+node_modules/jsdom/node_modules/@tootallnate/once
+  http-proxy-agent  4.0.1 - 5.0.0
+  Depends on vulnerable versions of @tootallnate/once
+  node_modules/http-proxy-agent
+  node_modules/jsdom/node_modules/http-proxy-agent
+    builder-util  22.14.7 - 25.1.3
+    Depends on vulnerable versions of http-proxy-agent
+    node_modules/builder-util
+      app-builder-lib  22.14.7 - 26.5.0
+      Depends on vulnerable versions of builder-util
+      Depends on vulnerable versions of electron-publish
+      Depends on vulnerable versions of tar
+      node_modules/app-builder-lib
+        dmg-builder  22.14.7 - 26.5.0
+        Depends on vulnerable versions of app-builder-lib
+        Depends on vulnerable versions of builder-util
+        node_modules/dmg-builder
+          electron-builder  19.25.0 || 22.14.7 - 26.5.0
+          Depends on vulnerable versions of app-builder-lib
+          Depends on vulnerable versions of builder-util
+          Depends on vulnerable versions of dmg-builder
+          node_modules/electron-builder
+      electron-publish  22.14.7 - 25.0.6 || 25.1.2 - 25.1.3
+      Depends on vulnerable versions of builder-util
+      node_modules/electron-publish
+    jsdom  16.6.0 - 22.1.0
+    Depends on vulnerable versions of http-proxy-agent
+    node_modules/jsdom
+      jest-environment-jsdom  27.0.1 - 30.0.0-rc.1
+      Depends on vulnerable versions of jsdom
+      node_modules/jest-environment-jsdom
+        jest-config  27.0.1 - 27.5.1
+        Depends on vulnerable versions of jest-environment-jsdom
+        Depends on vulnerable versions of jest-runner
+        node_modules/jest-config
+          @jest/core  27.0.1 - 27.5.1
+          Depends on vulnerable versions of jest-config
+          Depends on vulnerable versions of jest-runner
+          node_modules/@jest/core
+            jest  27.0.1 - 27.5.1
+            Depends on vulnerable versions of @jest/core
+            Depends on vulnerable versions of jest-cli
+            node_modules/jest
+            jest-cli  27.0.1 - 27.5.1
+            Depends on vulnerable versions of @jest/core
+            Depends on vulnerable versions of jest-config
+            node_modules/jest-cli
+        jest-runner  27.0.4 - 27.5.1
+        Depends on vulnerable versions of jest-environment-jsdom
+        node_modules/jest-runner
+
+electron  <=39.8.4
+Severity: high
+Electron vulnerable to Heap Buffer Overflow in NativeImage - https://github.com/advisories/GHSA-6r2x-8pq8-9489
+Electron has ASAR Integrity Bypass via resource modification - https://github.com/advisories/GHSA-vmqv-hx8q-j7mg
+Electron: AppleScript injection in app.moveToApplicationsFolder on macOS - https://github.com/advisories/GHSA-5rqw-r77c-jp79
+Electron: Service worker can spoof executeJavaScript IPC replies - https://github.com/advisories/GHSA-xj5x-m3f3-5x3h
+Electron: Incorrect origin passed to permission request handler for iframe requests - https://github.com/advisories/GHSA-r5p7-gp4j-qhrx
+Electron: Out-of-bounds read in second-instance IPC on macOS and Linux - https://github.com/advisories/GHSA-3c8v-cfp5-9885
+Electron: nodeIntegrationInWorker not correctly scoped in shared renderer processes - https://github.com/advisories/GHSA-xwr5-m59h-vwqr
+Electron: Use-after-free in offscreen child window paint callback - https://github.com/advisories/GHSA-532v-xpq5-8h95
+Electron: Registry key path injection in app.setAsDefaultProtocolClient on Windows - https://github.com/advisories/GHSA-mwmh-mq4g-g6gr
+Electron: Use-after-free in download save dialog callback - https://github.com/advisories/GHSA-9w97-2464-8783
+Electron: Use-after-free in WebContents fullscreen, pointer-lock, and keyboard-lock permission callbacks - https://github.com/advisories/GHSA-8337-3p73-46f4
+Electron: Use-after-free in PowerMonitor on Windows and macOS - https://github.com/advisories/GHSA-jjp3-mq3x-295m
+Electron: Unquoted executable path in app.setLoginItemSettings on Windows - https://github.com/advisories/GHSA-jfqx-fxh3-c62j
+Electron: HTTP Response Header Injection in custom protocol handlers and webRequest - https://github.com/advisories/GHSA-4p4r-m79c-wq3v
+Electron: USB device selection not validated against filtered device list - https://github.com/advisories/GHSA-9899-m83m-qhpj
+Electron: Crash in clipboard.readImage() on malformed clipboard image data - https://github.com/advisories/GHSA-f37v-82c4-4x64
+Electron: Named window.open targets not scoped to the opener's browsing context - https://github.com/advisories/GHSA-f3pv-wv63-48x8
+Electron: Renderer command-line switch injection via undocumented commandLineSwitches webPreference - https://github.com/advisories/GHSA-9wfr-w7mm-pc7f
+fix available via `npm audit fix --force`
+Will install electron@41.5.0, which is a breaking change
+node_modules/electron
+
+esbuild  <=0.24.2
+Severity: moderate
+esbuild enables any website to send any requests to the development server and read the response - https://github.com/advisories/GHSA-67mh-4wv8-2f99
+fix available via `npm audit fix --force`
+Will install vitest@4.1.5, which is a breaking change
+node_modules/esbuild
+  vite  <=6.4.1
+  Depends on vulnerable versions of esbuild
+  node_modules/vite
+    vite-node  <=2.2.0-beta.2
+    Depends on vulnerable versions of vite
+    node_modules/vite-node
+      vitest  0.0.1 - 0.0.12 || 0.0.29 - 0.0.122 || 0.3.3 - 2.2.0-beta.2
+      Depends on vulnerable versions of vite
+      Depends on vulnerable versions of vite-node
+      node_modules/vitest
+
+nth-check  <2.0.1
+Severity: high
+Inefficient Regular Expression Complexity in nth-check - https://github.com/advisories/GHSA-rp65-9cf3-cjxr
+fix available via `npm audit fix --force`
+Will install react-scripts@0.0.0, which is a breaking change
+node_modules/svgo/node_modules/nth-check
+  css-select  <=3.1.0
+  Depends on vulnerable versions of nth-check
+  node_modules/svgo/node_modules/css-select
+    svgo  1.0.0 - 1.3.2
+    Depends on vulnerable versions of css-select
+    node_modules/svgo
+      @svgr/plugin-svgo  <=5.5.0
+      Depends on vulnerable versions of svgo
+      node_modules/@svgr/plugin-svgo
+        @svgr/webpack  4.0.0 - 5.5.0
+        Depends on vulnerable versions of @svgr/plugin-svgo
+        node_modules/@svgr/webpack
+          react-scripts  >=0.1.0
+          Depends on vulnerable versions of @svgr/webpack
+          Depends on vulnerable versions of css-minimizer-webpack-plugin
+          Depends on vulnerable versions of jest
+          Depends on vulnerable versions of resolve-url-loader
+          Depends on vulnerable versions of webpack-dev-server
+          Depends on vulnerable versions of workbox-webpack-plugin
+          node_modules/react-scripts
+
+postcss  <=8.5.9
+Severity: moderate
+PostCSS line return parsing error - https://github.com/advisories/GHSA-7fh5-64p2-3v2j
+PostCSS has XSS via Unescaped </style> in its CSS Stringify Output - https://github.com/advisories/GHSA-qx2v-qp2m-jg93
+fix available via `npm audit fix --force`
+Will install react-scripts@0.0.0, which is a breaking change
+node_modules/resolve-url-loader/node_modules/postcss
+  resolve-url-loader  0.0.1-experiment-postcss || 3.0.0-alpha.1 - 4.0.0
+  Depends on vulnerable versions of postcss
+  node_modules/resolve-url-loader
+
+serialize-javascript  <=7.0.4
+Severity: high
+Serialize JavaScript is Vulnerable to RCE via RegExp.flags and Date.prototype.toISOString() - https://github.com/advisories/GHSA-5c6j-r48x-rmvq
+Serialize JavaScript has CPU Exhaustion Denial of Service via crafted array-like objects - https://github.com/advisories/GHSA-qj8w-gfj5-8c6v
+fix available via `npm audit fix --force`
+Will install react-scripts@0.0.0, which is a breaking change
+node_modules/rollup-plugin-terser/node_modules/serialize-javascript
+node_modules/serialize-javascript
+  css-minimizer-webpack-plugin  <=7.0.4
+  Depends on vulnerable versions of serialize-javascript
+  node_modules/css-minimizer-webpack-plugin
+  rollup-plugin-terser  3.0.0 || >=4.0.4
+  Depends on vulnerable versions of serialize-javascript
+  node_modules/rollup-plugin-terser
+    workbox-build  5.0.0-alpha.0 - 7.0.0
+    Depends on vulnerable versions of rollup-plugin-terser
+    node_modules/workbox-build
+      workbox-webpack-plugin  5.0.0-alpha.0 - 7.0.0
+      Depends on vulnerable versions of workbox-build
+      node_modules/workbox-webpack-plugin
+
+tar  <=7.5.10
+Severity: high
+node-tar Vulnerable to Arbitrary File Creation/Overwrite via Hardlink Path Traversal - https://github.com/advisories/GHSA-34x7-hfp2-rc4v
+node-tar is Vulnerable to Arbitrary File Overwrite and Symlink Poisoning via Insufficient Path Sanitization - https://github.com/advisories/GHSA-8qq5-rm4j-mr97
+Arbitrary File Read/Write via Hardlink Target Escape Through Symlink Chain in node-tar Extraction - https://github.com/advisories/GHSA-83g3-92jg-28cx
+tar has Hardlink Path Traversal via Drive-Relative Linkpath - https://github.com/advisories/GHSA-qffp-2rhf-9h96
+node-tar Symlink Path Traversal via Drive-Relative Linkpath - https://github.com/advisories/GHSA-9ppj-qmqm-q256
+Race Condition in node-tar Path Reservations via Unicode Ligature Collisions on macOS APFS - https://github.com/advisories/GHSA-r6q2-hw4h-h46w
+fix available via `npm audit fix --force`
+Will install electron-builder@26.8.1, which is a breaking change
+node_modules/tar
+
+underscore  <=1.13.7
+Severity: high
+Underscore has unlimited recursion in _.flatten and _.isEqual, potential for DoS attack - https://github.com/advisories/GHSA-qpx9-hpmf-5gmw
+fix available via `npm audit fix`
+node_modules/underscore
+  jsonpath  *
+  Depends on vulnerable versions of underscore
+  node_modules/jsonpath
+    bfj  7.1.0 - 9.1.2
+    Depends on vulnerable versions of jsonpath
+    node_modules/bfj
+
+uuid  <14.0.0
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+fix available via `npm audit fix --force`
+Will install react-scripts@0.0.0, which is a breaking change
+node_modules/uuid
+  sockjs  >=0.3.17
+  Depends on vulnerable versions of uuid
+  node_modules/sockjs
+    webpack-dev-server  *
+    Depends on vulnerable versions of sockjs
+    node_modules/webpack-dev-server
+
+
+
+39 vulnerabilities (11 low, 9 moderate, 19 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+[1;33m⚠️  Some vulnerabilities could not be auto-fixed[0m
+[0;34m[03:59:07][0m Checking outdated packages...
+[1;33m⚠️  npm outdated: 88 packages can be updated[0m
+[0;34m[03:59:08][0m Checking GitHub Actions workflows...
+[0;32m✅ GitHub Actions workflows checked[0m
+[0;34m[03:59:08][0m Checking Electron Builder...
+[0;32m✅ Electron: 27.0.0, electron-builder: 24.6.4[0m
+[0;34m[03:59:08][0m Checking recent workflow runs...
+[0;32m✅ Workflow status retrieved[0m
+[0;34m[03:59:09][0m Maintenance check completed
+
+[0;32mReport saved to: maintenance-report-2026-05-05.md[0m
+[0;32mLog saved to: maintenance-check-2026-05-05.log[0m
