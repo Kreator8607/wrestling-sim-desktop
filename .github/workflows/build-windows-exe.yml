@@ -109,12 +109,12 @@ jobs:
             $version = (Get-Content package.json | ConvertFrom-Json).version
             $nodeVersion = "${{ matrix.node-version }}"
             $buildDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-            $placeholderContent = @"
-Pro Wrestling Sim v$version - Build Artifact
+            $placeholderContent = @'
+Pro Wrestling Sim v{0} - Build Artifact
 
-Build Date: $buildDate
+Build Date: {1}
 Platform: Windows (x64)
-Node.js: $nodeVersion
+Node.js: {2}
 
 Note: This is a placeholder. The actual executable will be generated on the next successful build.
 
@@ -122,7 +122,7 @@ For more information, see:
 - README.md
 - RELEASE_NOTES_v5.0.0_ROADMAP.md
 - IMPROVEMENT_ROADMAP_v5.0.0.md
-"@
+'@ -f $version, $buildDate, $nodeVersion
             New-Item -ItemType File -Path "dist/Pro-Wrestling-Sim-$version.txt" -Value $placeholderContent -Force
             Write-Host "Placeholder created at dist/Pro-Wrestling-Sim-$version.txt"
           }
