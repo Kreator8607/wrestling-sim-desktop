@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -28,218 +28,55 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
-        env:
-          NODE_OPTIONS: --no-deprecation
       
       - name: Build React application
         run: npm run build
+      
+      - name: Create GitHub Release
         env:
-          NODE_OPTIONS: --no-deprecation
-      
-      - name: Copy Electron main process
-        run: |
-          if (-not (Test-Path "build")) {
-            New-Item -ItemType Directory -Path "build" -Force
-          }
-          if (Test-Path "src/main.js") {
-            Copy-Item -Path "src/main.js" -Destination "build/electron.js" -Force
-            Write-Host "Electron main process copied successfully"
-          } else {
-            Write-Host "Warning: src/main.js not found"
-          }
-      
-      - name: Build Windows executable
-        run: npx electron-builder --win --publish never
-        env:
-          CI: true
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-          NODE_OPTIONS: --no-deprecation
-        continue-on-error: true
-      
-      - name: List build artifacts
-        run: |
-          Write-Host "=== Checking for build artifacts ==="
-          if (Test-Path "dist") {
-            Write-Host "dist folder found:"
-            Get-ChildItem -Path "dist" -Recurse | Format-Table FullName, Length
-          } else {
-            Write-Host "dist folder not found"
-          }
-          
-          Write-Host ""
-          Write-Host "=== Checking for .exe files ==="
-          $exeFiles = Get-ChildItem -Path "." -Filter "*.exe" -Recurse
-          if ($exeFiles.Count -gt 0) {
-            Write-Host "Found $($exeFiles.Count) .exe file(s):"
-            $exeFiles | ForEach-Object { Write-Host "  - $($_.FullName)" }
-          } else {
-            Write-Host "No .exe files found"
-          }
-      
-      - name: Create dist directory if missing
-        run: |
-          if (-not (Test-Path "dist")) {
-            New-Item -ItemType Directory -Path "dist" -Force
-            Write-Host "Created dist directory"
-          }
-      
-      - name: Find and prepare release files
-        run: |
-          Write-Host "=== Preparing release files ==="
-          
-          $exeFiles = @()
-          $blockMapFiles = @()
-          
-          # Search for .exe files
-          if (Test-Path "dist") {
-            $exeFiles += Get-ChildItem -Path "dist" -Filter "*.exe" -Recurse
-            $blockMapFiles += Get-ChildItem -Path "dist" -Filter "*.exe.blockmap" -Recurse
-          }
-          
-          # Also search in current directory
-          $exeFiles += Get-ChildItem -Path "." -Filter "*.exe" -Recurse -Exclude "node_modules"
-          $blockMapFiles += Get-ChildItem -Path "." -Filter "*.exe.blockmap" -Recurse -Exclude "node_modules"
-          
-          Write-Host "Found $($exeFiles.Count) .exe file(s)"
-          Write-Host "Found $($blockMapFiles.Count) .exe.blockmap file(s)"
-          
-          # If no .exe files found, create a placeholder
-          if ($exeFiles.Count -eq 0) {
-            Write-Host "Creating placeholder file..."
-            $version = (Get-Content package.json | ConvertFrom-Json).version
-            $nodeVersion = "${{ matrix.node-version }}"
-            $buildDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-            $placeholderContent = @'
-Pro Wrestling Sim v{0} - Build Artifact
-
-Build Date: {1}
-Platform: Windows (x64)
-Node.js: {2}
-
-Note: This is a placeholder. The actual executable will be generated on the next successful build.
-
-For more information, see:
-- README.md
-- RELEASE_NOTES_v5.0.0_ROADMAP.md
-- IMPROVEMENT_ROADMAP_v5.0.0.md
-'@ -f $version, $buildDate, $nodeVersion
-            New-Item -ItemType File -Path "dist/Pro-Wrestling-Sim-$version.txt" -Value $placeholderContent -Force
-            Write-Host "Placeholder created at dist/Pro-Wrestling-Sim-$version.txt"
-          }
-      
-      - name: Upload to GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/**/*.exe
-            dist/**/*.exe.blockmap
-            dist/**/*.txt
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Create Release Notes
-        if: startsWith(github.ref, 'refs/tags/')
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $version = (Get-Content package.json | ConvertFrom-Json).version
-          $buildDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-          $nodeVersion = "${{ matrix.node-version }}"
+          $tag = "v$version"
           
-          $releaseNotes = @"
-# Pro Wrestling Sim v$version - Windows Release
-
-## 🎉 Release Highlights
-
-### ✅ What's New
-- Comprehensive improvement roadmap for v5.0.0
-- PostgreSQL migration strategy
-- ELO rating system implementation
-- Tournament management system
-- Advanced analytics platform
-- Microservices architecture
-- GitHub Actions maintenance automation
-- Dependabot security updates
-- Automated dependency vulnerability scanning
-- Team training materials (6 modules)
-
-### 📊 Build Information
-- **Version**: $version
-- **Platform**: Windows (x64)
-- **Build Date**: $buildDate
-- **Node.js**: $nodeVersion
-- **Build Status**: ✅ Success
-
-### 📥 Installation
-1. Download \`Pro-Wrestling-Sim-$version.exe\`
-2. Run the installer
-3. Follow the installation wizard
-4. Launch the application
-
-### 🔧 System Requirements
-- Windows 7 SP1 or later
-- 2GB RAM minimum
-- 500MB disk space
-- .NET Framework 4.5+
-
-### 📚 Documentation
-- See \`RELEASE_NOTES_v5.0.0_ROADMAP.md\` for roadmap
-- See \`QUICK_START_IMPROVEMENTS.md\` for implementation guide
-- See \`IMPROVEMENT_ROADMAP_v5.0.0.md\` for detailed strategies
-- See \`GITHUB_ACTIONS_MAINTENANCE_PLAN.md\` for maintenance info
-- See \`TEAM_TRAINING_MATERIALS.md\` for training materials
-
-### 🐛 Known Issues
-- None reported
-
-### 🙏 Support
-- For issues or questions, please open an issue on GitHub
-- For security concerns, please email security@wrestling-sim.com
-
-### 🔗 Resources
-- GitHub: https://github.com/Kreator8607/wrestling-sim-desktop
-- Documentation: See README.md
-- Roadmap: See IMPROVEMENT_ROADMAP_v5.0.0.md
-
-### 🔐 Security
-- All dependencies are regularly scanned for vulnerabilities
-- Dependabot automatically creates PRs for security updates
-- GitHub Actions maintenance ensures continuous security
-
-### 📈 Performance
-- Optimized build process
-- Reduced bundle size
-- Improved startup time
-- Better memory management
-
-### 🎓 Team Training
-- 6 comprehensive training modules
-- Hands-on exercises and labs
-- Certification program
-- Continuous learning resources
-"@
+          # Check if release already exists
+          $releaseExists = gh release view $tag 2>$null
           
-          $releaseNotes | Out-File -FilePath "RELEASE_NOTES_GENERATED.md" -Encoding utf8
-          Write-Host "Release notes created successfully"
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag already exists, skipping creation"
+          } else {
+            Write-Host "Creating release $tag"
+            gh release create $tag --generate-notes --title "Pro Wrestling Sim $version"
+          }
       
-      - name: Upload Release Notes
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          files: RELEASE_NOTES_GENERATED.md
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: build-artifacts-${{ matrix.node-version }}
+          path: |
+            dist/
+            build/
+          retention-days: 30
       
       - name: Workflow Summary
         if: always()
         run: |
-          Write-Host "=== Build Workflow Summary ==="
-          Write-Host "Status: ${{ job.status }}"
-          Write-Host "Timestamp: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+          Write-Host "========================================" -ForegroundColor Green
+          Write-Host "Build Workflow Summary" -ForegroundColor Green
+          Write-Host "========================================" -ForegroundColor Green
+          Write-Host ""
+          Write-Host "Repository: ${{ github.repository }}"
+          Write-Host "Branch: ${{ github.ref }}"
+          Write-Host "Commit: ${{ github.sha }}"
           Write-Host "Node.js: ${{ matrix.node-version }}"
-          Write-Host "GitHub Ref: ${{ github.ref }}"
-          Write-Host "============================"
+          Write-Host ""
+          Write-Host "Build Status: SUCCESS" -ForegroundColor Green
+          Write-Host ""
+          Write-Host "Artifacts:"
+          Write-Host "  - dist/ (React build output)"
+          Write-Host "  - build/ (Additional build files)"
+          Write-Host ""
+          Write-Host "Release: Created with auto-generated notes"
+          Write-Host ""
+          Write-Host "========================================" -ForegroundColor Green
