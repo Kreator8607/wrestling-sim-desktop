@@ -107,12 +107,14 @@ jobs:
           if ($exeFiles.Count -eq 0) {
             Write-Host "Creating placeholder file..."
             $version = (Get-Content package.json | ConvertFrom-Json).version
+            $nodeVersion = "${{ matrix.node-version }}"
+            $buildDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
             $placeholderContent = @"
 Pro Wrestling Sim v$version - Build Artifact
 
-Build Date: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+Build Date: $buildDate
 Platform: Windows (x64)
-Node.js: ${{ matrix.node-version }}
+Node.js: $nodeVersion
 
 Note: This is a placeholder. The actual executable will be generated on the next successful build.
 
